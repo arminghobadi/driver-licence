@@ -1,0 +1,6 @@
+{
+  "name": "driving",
+  "dependencies": {
+    "puppeteer": "^10.0.0"
+  }
+}
