@@ -1,16 +1,18 @@
 const puppeteer = require("puppeteer");
 
+// document.querySelectorAll('ul.row')[0].children[3].children[0].click();
 
+let numRetries = 0;
 
 (async () => {
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
-  page.on("console.log", co => {
- 
-    console.log(co.text())})
+  await page.setViewport({ width: 1000, height: 800 });
+  page.on("console", co => {
+    if  (co.type() === "log") console.log(co.text())
+  })
   
   await retry(page)
-  
   await page.goto("https://drivetest.ca/book-a-road-test/");
   await mainScreenHandler(page);
   await infoScreenHandler(page);
@@ -24,9 +26,10 @@ const retry = async (page) => {
     await mainScreenHandler(page);
     await infoScreenHandler(page);
     await licenceSelectorHandler(page);
-    await locationSelectorHandler(page);
+    // await locationSelectorHandler(page);
   } catch (e) {
     console.log("GOT ERROR:", e, "retrying")
+    if (numRetries++ > 100) return
     await retry(page)
   }
 }
@@ -41,7 +44,7 @@ const locationSelectorHandler = async page => {
       return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
-    for (let i = 0 ; i < 25 ; i++) {
+    for (let i = 0 ; i < 26 ; i++) {
       // click on open saturdays id sat-checkbox
       const checkbox = elemById("sat-checkbox");
       checkbox.checked = true;
@@ -74,7 +77,19 @@ const locationSelectorHandler = async page => {
       await sleep(2000)
   
       if (res.length) {
-        console.log("FOUND ON IN ", loc.children[0].innerText)
+        for ( let a = 0 ; a < res.length ; a++) {
+          await res[a].children[0].children[0].children[0].children[0].click()
+          await document.querySelectorAll(".booking-submit")[1].click()
+          await sleep(2000)
+          if (document.querySelectorAll('ul.row')[0]) {
+            console.log(">>>>>>>>>> FOUND A REAL ONE IN ", loc.children[0].innerText)
+            await sleep(10000000)
+          }
+          else {
+            console.log("found fake in ", loc.children[0].innerText)
+            await page.screenshot()
+          }
+        }
         // window.alert("found one!!!");
       }
     
@@ -96,7 +111,21 @@ const locationSelectorHandler = async page => {
           // window.alert("found one!!!");
           // shouldContinue = false;
           // break;
-          console.log("FOUND ONE! in ", loc.children[0].innerText)
+          for ( let a = 0 ; a < res.length ; a++) {
+            await res[a].children[0].children[0].children[0].children[0].click()
+            await document.querySelectorAll(".booking-submit")[1].click()
+            await sleep(2000)
+            if (document.querySelectorAll('ul.row')[0]) {
+              console.log(">>>>>>>>>> FOUND A REAL ONE IN ", loc.children[0].innerText)
+              await sleep(10000000)
+            }
+            else {
+              console.log("found fake in ", loc.children[0].innerText)
+              await page.screenshot()
+            }
+          }
+          
+          
         }
     
         // go to next month
