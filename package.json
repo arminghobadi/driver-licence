@@ -1,5 +1,8 @@
 {
   "name": "driving",
+  "scripts": {
+    "start": "node main.js"
+  },
   "dependencies": {
     "puppeteer": "^10.0.0"
   }

@@ -167,10 +167,10 @@ const infoScreenHandler = async (page) => {
       elem.dispatchEvent(new Event("change"));
     }
 
-    setInputValue("emailAddress", "armin.ghobadi95@gmail.com")
-    setInputValue("confirmEmailAddress", "armin.ghobadi95@gmail.com")
-    setInputValue("licenceNumber", "G35730600950805")
-    setInputValue("licenceExpiryDate", "2022/10/31")
+    setInputValue("emailAddress", "ghazaleh.heravi@gmail.com")
+    setInputValue("confirmEmailAddress", "ghazaleh.heravi@gmail.com")
+    setInputValue("licenceNumber", "H26512820935304")
+    setInputValue("licenceExpiryDate", "2026/01/11") // YYYY/MM/DD
     elemById("regSubmitBtn").click()
   })
   await page.waitForSelector("#G2btn");
